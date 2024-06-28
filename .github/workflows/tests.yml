@@ -1,0 +1,61 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - "*"
+    paths-ignore:
+      - README.md
+      - .github/workflows/release.yml
+
+jobs:
+  tests:
+    strategy:
+      matrix:
+        operating-systems: ["ubuntu-20.04", "ubuntu-22.04", "ubuntu-24.04"]
+        php-versions: ["8.3"]
+
+    runs-on: ${{ matrix.operating-systems }}
+
+    name: PHP ${{ matrix.php-versions }} on ${{ matrix.operating-systems }}
+
+    steps:
+      - name: Setup PHP ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Install Composer dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
+
+      - name: Test code style
+        run: vendor/bin/pint --test
+
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Set directory permissions
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Create database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+
+      - name: Execute tests
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: /home/runner/work/larashib/larashib/database/database.sqlite
+        run: vendor/bin/phpunit
