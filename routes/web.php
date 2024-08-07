@@ -9,6 +9,7 @@ use App\Http\Controllers\UserStatusController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
+Route::view('up', 'health-up');
 Route::view('/', 'welcome')->middleware('guest');
 
 Route::get('language/{language}', LanguageController::class);
