@@ -2,7 +2,8 @@
 
 _Larashib_ (Laravel + Shibboleth) is just a boilerplate code for a Laravel application with SAML authentication using Shibboleth Service Provider running under Apache web server.
 
-[![Actions Status](https://github.com/JanOppolzer/larashib/workflows/Tests/badge.svg)](https://github.com/JanOppolzer/larashib/actions/workflows/tests.yml)
+![pint.yml](https://github.com/JanOppolzer/larashib/actions/workflows/tests.yml/badge.svg)
+![release.yml](https://github.com/JanOppolzer/larashib/actions/workflows/release.yml/badge.svg)
 
 ## Requirements
 
